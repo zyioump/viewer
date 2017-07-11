@@ -1,0 +1,33 @@
+var globalJson;
+
+function getGlobalJson(){
+  return globalJson;
+}
+
+
+function view(){
+  var json = $.getJSON("http://opv_master:5000/lot?id_campaign="+document.getElementById('campagneID').value, function(json){
+    window.tmp = json;
+    globalJson = json;
+    for (var i = 0 ; i<json.objects.length; i++){
+      var jsonSensors = $.getJSON("http://opv_master:5000/sensors/"+json.objects[i].sensors.id_sensors+"/1", function(jsonSensors){
+
+        console.log(jsonSensors.lot[0].id_lot)
+        var greatJson;
+        for (var i = 0 ; i<getGlobalJson().objects.length; i++){
+          if (getGlobalJson().objects[i].id_lot == jsonSensors.lot[0].id_lot){
+            greatJson = getGlobalJson().objects[i];
+          }
+        }
+        console.log(greatJson);
+
+        if (greatJson.tile.id_tile != null){
+          var marker = L.marker([jsonSensors.gps_pos.coordinates[0], jsonSensors.gps_pos.coordinates[1]], {icon: blueMarker}).addTo(map);
+        }else{
+          var marker = L.marker([jsonSensors.gps_pos.coordinates[0], jsonSensors.gps_pos.coordinates[1]], {icon: redMarker}).addTo(map);
+        }
+        marker.bindPopup(JSON.stringify(greatJson))
+      });
+    }
+  });
+}
