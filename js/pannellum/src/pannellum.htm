@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html style="width:100%;height:100%;">
+    <head>
+        <title>pannellum</title>
+        <meta charset="utf-8">
+        <link type="text/css" rel="Stylesheet" href="css/pannellum.css" />
+    </head>
+    
+    <body style="width:100%;height:100%;margin:0px;padding:0px;">
+        <div id="pannellum_container" style="height:100%;">
+        </div>
+        
+
+        <script type="text/javascript" src="../src/js/libpannellum.js"></script>
+        <script type="text/javascript" src="../src/js/RequestAnimationFrame.js"></script>
+        <script type="text/javascript" src="../src/js/pannellum.js"></script>
+        <script type="text/javascript">
+            var panViewer = new PannellumViewer( document.getElementById('pannellum_container')  );
+            panViewer.init();
+        </script>
+    </body>
+</html>
