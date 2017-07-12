@@ -1,8 +1,7 @@
-.pannellum {
-    margin: 0px;
-    padding: 0px;
+.pnlm-container {
+    margin: 0;
+    padding: 0;
     overflow: hidden;
-    /*position: fixed;*/
     position: relative;
     cursor: default;
     width: 100%;
@@ -15,45 +14,89 @@
     -o-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    outline: 0;
+    line-height: 1.4;
+    contain: content;
 }
 
-.pannellum .grab {
-    cursor:url('img/grab.svg') 12 8,default;
+.pnlm-container * {
+    box-sizing: content-box;
 }
 
-.pannellum .grabbing {
-    cursor: url('img/grabbing.svg') 12 8,default;
+.pnlm-grab {
+    cursor: grab;
+    cursor: url('img/grab.svg') 12 8, default;
 }
 
-.pannellum .sprite {
+.pnlm-grabbing {
+    cursor: grabbing;
+    cursor: url('img/grabbing.svg') 12 8, default;
+}
+
+.pnlm-sprite {
     background-image: url('img/sprites.svg');
 }
 
-.pannellum .container {
-    cursor: inherit;
+.pnlm-container:-moz-full-screen {
+    height: 100% !important;
+    width: 100% !important;
+    position: static !important;
+}
+.pnlm-container:-webkit-full-screen {
+    height: 100% !important;
+    width: 100% !important;
+    position: static !important;
+}
+.pnlm-container:-ms-fullscreen {
+    height: 100% !important;
+    width: 100% !important;
+    position: static !important;
+}
+.pnlm-container:fullscreen {
+    height: 100% !important;
+    width: 100% !important;
+    position: static !important;
 }
 
-.pannellum .controls {
+.pnlm-render-container {
+    cursor: inherit;
+    
+    /* Fix display bug in Safari 7 */
     position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.pnlm-controls {
+    margin-top: 4px;
     background-color: #fff;
     border: 1px solid #999;
     border-color: rgba(0,0,0,0.4);
     border-radius: 3px;
     cursor: pointer;
+    z-index: 2;
+    /* Fix Safari fullscreen bug */
+    -webkit-transform: translateZ(9999px);
+    transform: translateZ(9999px);
 }
 
-.pannellum .control:hover {
+.pnlm-control:hover {
     background-color: #f8f8f8;
 }
 
-.pannellum .zoomcontrols {
-    top: 4px;
+.pnlm-controls-container {
+    position: absolute;
+    top: 0;
     left: 4px;
+    z-index: 1;
+}
+
+.pnlm-zoom-controls {
     width: 26px;
     height: 52px;
 }
 
-.pannellum .zoom_in {
+.pnlm-zoom-in {
     width: 100%;
     height: 50%;
     position: absolute;
@@ -61,7 +104,7 @@
     border-radius: 3px 3px 0 0;
 }
 
-.pannellum .zoom_out {
+.pnlm-zoom-out {
     width: 100%;
     height: 50%;
     position: absolute;
@@ -72,27 +115,40 @@
     border-radius: 0 0 3px 3px;
 }
 
-.pannellum .fullwindowtoggle_button {
-    top: 66px;
-    left: 4px;
+.pnlm-fullscreen-toggle-button, .pnlm-orientation-button, .pnlm-hot-spot-debug-indicator {
     width: 26px;
     height: 26px;
 }
 
-.pannellum .fullwindowtoggle_button_inactive {
+.pnlm-hot-spot-debug-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 26px;
+    height: 26px;
+    margin: -13px 0 0 -13px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 13px;
+    display: none;
+}
+
+.pnlm-orientation-button-inactive {
+    background-position: 0 -156px;
+}
+
+.pnlm-orientation-button-active {
+    background-position: 0 -182px;
+}
+
+.pnlm-fullscreen-toggle-button-inactive {
     background-position: 0 -52px;
 }
 
-.pannellum .fullwindowtoggle_button_active {
+.pnlm-fullscreen-toggle-button-active {
     background-position: 0 -78px;
 }
 
-.pannellum-container:-webkit-full-screen{ /* webkit full screen bug */
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.pannellum .panorama_info {
+.pnlm-panorama-info {
     position: absolute;
     bottom: 4px;
     background-color: rgba(0,0,0,0.7);
@@ -101,9 +157,13 @@
     color: #fff;
     text-align: left;
     display: none;
+    z-index: 2;
+    /* Fix Safari fullscreen bug */
+    -webkit-transform: translateZ(9999px);
+    transform: translateZ(9999px);
 }
 
-.pannellum .title_box {
+.pnlm-title-box {
     position: relative;
     font-size: 20px;
     display: table;
@@ -111,14 +171,14 @@
     margin-bottom: 3px;
 }
 
-.pannellum .author_box {
+.pnlm-author-box {
     position: relative;
     font-size: 12px;
     display: table;
     padding-left: 5px;
 }
 
-.pannellum .load_box {
+.pnlm-load-box {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -133,20 +193,25 @@
     color: #fff;
 }
 
-.pannellum .lbox {
+.pnlm-load-box p {
+    margin: 20px 0;
+}
+
+.pnlm-lbox {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 20px;
     height: 20px;
     margin: -10px 0 0 -10px;
+    display: none;
 }
 
-.pannellum .loading {
+.pnlm-loading {
     animation-duration: 1.5s;
     -webkit-animation-duration: 1.5s;
-    animation-name: pannellum-mv;
-    -webkit-animation-name: pannellum-mv;
+    animation-name: pnlm-mv;
+    -webkit-animation-name: pnlm-mv;
     animation-iteration-count: infinite;
     -webkit-animation-iteration-count: infinite;
     animation-timing-function: linear;
@@ -157,7 +222,7 @@
     position: relative;
 }
 
-@keyframes pannellum-mv {
+@keyframes pnlm-mv {
     from {left:0;top:0;}
     25% {left:10px;top:0;}
     50% {left:10px;top:10px;}
@@ -165,7 +230,7 @@
     to {left:0;top:0;}
 }
 
-@-webkit-keyframes pannellum-mv {
+@-webkit-keyframes pnlm-mv {
     from {left:0;top:0;}
     25% {left:10px;top:0;}
     50% {left:10px;top:10px;}
@@ -173,14 +238,13 @@
     to {left:0;top:0;}
 }
 
-.pannellum .load_button {
+.pnlm-load-button {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 200px;
     height: 100px;
     margin: -50px 0 0 -100px;
-    background-color: #222;
     background-color: rgba(0,0,0,.7);
     border-radius: 3px;
     text-align: center;
@@ -190,18 +254,16 @@
     cursor: pointer;
 }
 
-.pannellum .load_button:hover {
-    background-color: #111;
+.pnlm-load-button:hover {
     background-color: rgba(0,0,0,.8);
 }
 
-.pannellum .load_button p {
+.pnlm-load-button p {
     display: table-cell;
     vertical-align: middle;
 }
 
-.pannellum .infobox {
-    color: #000;
+.pnlm-info-box {
     font-size: 15px;
     position: absolute;
     top: 50%;
@@ -214,19 +276,26 @@
     display: table;
     text-align: center;
     color: #fff;
+    table-layout: fixed;
 }
 
-.pannellum .infobox p {
+.pnlm-info-box a {
+    color: #fff;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.pnlm-info-box p {
     display: table-cell;
     vertical-align: middle;
     padding: 0 5px 0 5px;
 }
 
-.pannellum .nocanvas {
+.pnlm-error-msg {
     display: none;
 }
 
-.pannellum .about {
+.pnlm-about-msg {
     font-size: 11px;
     line-height: 11px;
     color: #fff;
@@ -243,35 +312,41 @@
     -o-transition: opacity .3s ease-in-out;
     -ms-transition: opacity .3s ease-in-out;
     transition: opacity .3s ease-in-out;
+    z-index: 1;
 }
 
-.pannellum .about a:link, .pannellum .about a:visited {
+.pnlm-about-msg a:link, .pnlm-about-msg a:visited {
     color: #fff;
 }
 
-.pannellum .about a:hover, .pannellum .about a:active {
+.pnlm-about-msg a:hover, .pnlm-about-msg a:active {
     color: #eee;
 }
 
-.pannellum .hotspot {
+.pnlm-hotspot-base {
     position: absolute;
-    height: 26px;
-    width: 26px;
     visibility: hidden;
     cursor: default;
+    vertical-align: middle;
+    top: 0;
+    z-index: 1;
+}
+.pnlm-hotspot {
+    height: 26px;
+    width: 26px;
     border-radius: 13px;
 }
-.pannellum .hotspot:hover {
+.pnlm-hotspot:hover {
     background-color: rgba(255,255,255,0.2);
 }
-.pannellum .hotspot.info {
+.pnlm-hotspot.pnlm-info {
     background-position: 0 -104px;
 }
-.pannellum .hotspot.scene {
+.pnlm-hotspot.pnlm-scene {
     background-position: 0 -130px;
 }
 
-.pannellum div.tooltip span {
+div.pnlm-tooltip span {
     visibility: hidden;
     position: absolute;
     border-radius: 3px;
@@ -279,34 +354,79 @@
     color: #fff;
     text-align: center;
     max-width: 200px;
-    z-index: 10;
     padding: 5px 10px;
-    margin-top: -41px;
     margin-left: -220px;
     cursor: default;
 }
-.pannellum div.tooltip:hover span{
+div.pnlm-tooltip:hover span{
     visibility: visible;
 }
-.pannellum div.tooltip:hover:after {
-    content: "";
+div.pnlm-tooltip:hover span:after {
+    content: '';
     position: absolute;
     width: 0;
     height: 0;
     border-width: 10px;
     border-style: solid;
     border-color: rgba(0,0,0,0.7) transparent transparent transparent;
-    top: -12px;
-    left: 3px;
+    bottom: -20px;
+    left: -10px;
+    margin: 0 50%;
 }
 
-.pannellum .compass {
+.pnlm-compass {
+    position: absolute;
     width: 50px;
     height: 50px;
     right: 4px;
     bottom: 4px;
     border-radius: 25px;
     background-image: url('img/compass.svg');
-    cursor:default;
-    display:none;
+    cursor: default;
+    display: none;
+}
+
+.pnlm-world {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+.pnlm-face {
+    position: absolute;
+    -webkit-transform-origin: 0 0 0;
+    transform-origin: 0 0 0;
+}
+
+.pnlm-dragfix, .pnlm-preview-img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.pnlm-preview-img {
+    background-size: cover;
+    background-position: center;
+}
+
+.pnlm-lbar {
+    width: 150px;
+    margin: 0 auto;
+    border: #fff 1px solid;
+    height: 6px;
+}
+
+.pnlm-lbar-fill {
+    background: #fff;
+    height: 100%;
+    width: 0;
+}
+
+.pnlm-lmsg {
+    font-size: 12px;
+}
+
+.pnlm-fade-img {
+    position: absolute;
+    top: 0;
+    left: 0;
 }

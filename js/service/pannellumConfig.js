@@ -12,6 +12,7 @@ var PannellumConfig = function(){
           for (var j = 0; j<tileLot.length; j++){
             if (tileLot[j].tile.id_tile == tile.id_tile){
               var id = tileLot[j].id_lot+"-"+tileLot[j].id_malette;
+              config[id]['hotSpots'] = [];
               config[id]['preview'] = window.fm+"/v1/files/"+tile.fallback_path+"/fallback/f.jpg";
               config[id]['type'] = "multires";
               config[id]['multiRes'] = {};

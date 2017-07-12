@@ -8,8 +8,7 @@ var ViewersManagers = function(){
         	"logo_title": "Open Path View",
         	"title": "Vieilles Charrues 2014",
         	"author": "Open Path View",
-        	"autoload": true,
-        	"autoRotate": -4,
+        	//"autoLoad": true,
             "hotSpotDebug": true,
 
         	"firstScene": "Lily_Allen"
@@ -24,48 +23,56 @@ var ViewersManagers = function(){
 
     var initViewers = function(sceneConfig, cb){
 
-        panFrom = new PannellumViewer(document.getElementById('panFrom'));
-        panTo = new PannellumViewer(document.getElementById('panTo'));
-
         panoCfg["scenes"] = sceneConfig;
+        panoCfg["default"]["firstScene"] = Object.keys(sceneConfig)[0];
+        currentSceneIdTo = currentSceneIdFrom = Object.keys(sceneConfig)[0];
+
         console.log(panoCfg);
 
-        panFrom.setConfig( panoCfg );
-        panTo.setConfig( panoCfg );
+        panFrom = pannellum.viewer('panFrom', panoCfg);
+        panTo = pannellum.viewer('panTo', panoCfg);
 
-        panFrom.setHotspotCallBack(function(sceneId){
-            loadPanorama(sceneId, "from"); // TODO test
+        panFrom.setHotspotCallBack(function(sceneId, pitch, yaw, hfov){
+            loadPanorama(sceneId, pitch, yaw, hfov, "to"); // TODO test
         });
-        panTo.setHotspotCallBack( function(){
-            loadPanorama(sceneId, "to"); // TODO test
+        /*panTo.setHotspotCallBack(function(sceneId, pitch, yaw, hfov){
+            loadPanorama(sceneId, pitch, yaw, hfov, "to"); // TODO test
+        });*/
+
+        panFrom.setcustomKeyDownEvent(function(event){
+            if(event.keycode == 80){
+                console.log("Calling create hotspot");
+                var coords = panFrom.getLastMouseCoords();
+                createHotspot(coords[0], coords[1]);
+            }
         });
 
-        panFrom.init(function(){
+        /*panFrom.init(function(){
             panTo.init(function(){
-                panFrom.setCustomKeyPressed(function(event){
-                    console.log("CustomKeyPressed");
-                    if(event.keycode == 80){
-                        console.log("Calling create hotspot");
-                        createHotspot(event.pitch, event.yaw);
-                    }
-                });
                 cb();
             });
-        });
+        });*/
     };
 
-    var loadPanorama = function(sceneId, viewerId){
+    var loadPanorama = function(sceneId, pitch, yaw, hfov, viewerId){
+        console.log("loadPanorama");
         if(viewerId==="from"){
-            pf.loadScene(sceneId);
+            panFrom.loadScene(sceneId, pitch, yaw, hfov);
             currentSceneIdFrom = sceneId;
         }
         if(viewerId==="to"){
-            pt.loadScene(sceneId);
+            panTo.loadScene(sceneId, pitch, yaw, hfov);
             currentSceneIdTo = sceneId;
         }
     };
 
     var createHotspot = function(pitch, yaw){
+
+        if(!("hotSpots" in globalSceneConfig[currentSceneIdFrom])){
+            globalSceneConfig[currentSceneIdFrom]["hotSpots"] = [];
+        }
+
+        panFrom.destroyHotSpots();
         globalSceneConfig[currentSceneIdFrom]["hotSpots"].push(
             {
                 "pitch": pitch,
@@ -77,8 +84,7 @@ var ViewersManagers = function(){
                 "sceneId": currentSceneIdTo
             }
         );
-        panFrom.destroyHotSpots();
-        panFrom.createHotspot();
+        loadPanorama(currentSceneIdFrom, panFrom.getPitch(), panFrom.getYaw(), panFrom.getHfov(), "from");
     };
 
     return{

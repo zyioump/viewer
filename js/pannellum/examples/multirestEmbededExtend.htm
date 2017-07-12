@@ -1,0 +1,79 @@
+<html>
+<head>
+    <title>Dev OPV</title>
+    <link type="text/css" rel="Stylesheet" href="../src/css/pannellum.css"/>
+    <script src="../src/js/pannellum.js" type="text/javascript"></script>
+    <script src="../src/js/libpannellum.js" type="text/javascript"></script>
+</head>
+<body>
+    <div style="width: 500px; height: 500px" id="container" tabindex="1">
+    </div>
+    <script type="text/javascript">
+        var viewer;
+        var config={
+"default":{
+	"logo": "yes",
+	"logo_link": "http://openpathview.fr",
+	"logo_title": "Open Path View",
+	"title": "Vieilles Charrues 2014",
+	"author": "Open Path View",
+	"autoLoad": true,
+
+	"firstScene": "Lily_Allen"
+},
+
+"scenes":
+	{
+	"Lily_Allen":{
+		"title": "Lily Allen, fosse Glenmor (dimanche)",
+		"preview": "/opv/pano/d_p112/1/f0_0.jpg",
+
+		"yaw": -157.46,
+		"pitch": 1.96,
+
+		"type": "multires",
+
+		"multiRes": {
+            "basePath": "./multires",
+            "path": "/%l/%s%x%y",
+            "fallbackPath": "/fallback/%s",
+            "extension": "png",
+            "tileResolution": 256,
+            "maxLevel": 4,
+            "cubeResolution": 2048
+		},
+
+		"hotSpots": [
+			{
+                "pitch": -12,
+                "yaw": 170,
+                "type": "scene",
+                "title": "This is Jordan Pond, located in Acadia National Park.",
+                "sceneId": "Lily_Allen"
+            }
+		]
+	}}};
+        viewer = pannellum.viewer('container', config);
+        viewer.loadScene("Lily_Allen", 0, 0, 'same');
+        viewer.setHotspotCallBack(function(){ alert("cb");});
+        viewer.setcustomKeyDownEvent(function(e){
+            if(e.keycode == 80){ // P pressed
+                var coords = viewer.getLastMouseCoords();
+                viewer.destroyHotSpots();
+                config["scenes"]["Lily_Allen"]["hotSpots"].push(
+                    {
+                        "pitch": coords[0],
+                        "yaw": coords[1],
+                        "type": "scene",
+                        "title": "Hey toi",
+                        "sceneId": "Lily_Allen"
+                    }
+                );
+                viewer.loadScene("Lily_Allen", viewer.getPitch(), viewer.getYaw(), viewer.getHfov());
+            }
+        });
+
+
+    </script>
+</body>
+</html>

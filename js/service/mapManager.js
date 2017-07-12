@@ -46,7 +46,7 @@ var MapManager = function(){
             markers[lot.id_lot+"-"+lot.id_malette].bindPopup(JSON.stringify(lot));
           }else{
             markers[lot.id_lot+"-"+lot.id_malette] = L.marker([sensors.gps_pos.coordinates[0], sensors.gps_pos.coordinates[1]], {icon: blueMarker}).addTo(map);
-            markers[lot.id_lot+"-"+lot.id_malette].bindPopup(lot.id_lot+"-"+lot.id_malette+"</br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", \"from\")'>Display to left</button></br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", \"to\")'>Display to right</button>");
+            markers[lot.id_lot+"-"+lot.id_malette].bindPopup(lot.id_lot+"-"+lot.id_malette+"</br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", 0, 0, \"same\", \"from\")'>Display to left</button></br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", 0, 0, \"same\", \"to\")'>Display to right</button>");
           }
         });
       })
