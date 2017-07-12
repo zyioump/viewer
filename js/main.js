@@ -22,13 +22,7 @@ pf = viewers.getPanFrom();
 
 // dirty event manager
 var loadPanorama = function(sceneId, viewerId){
-    // -- Viewer part
-    if(viewerId==="from"){
-        pf.loadScene(sceneId);
-    }
-    if(viewerId==="to"){
-        pt.loadScene(sceneId);
-    }
+    viewers.loadPanorama(sceneId, viewerId);
 
     // -- Map part
     mapManager.focusPanorama(sceneId, viewerId);

@@ -303,16 +303,67 @@ function onDocumentMouseDown(event) {
     panEl.getElementsByClassName('pannellum')[0].classList.remove('grab');
     panEl.getElementsByClassName('pannellum')[0].classList.add('grabbing');
 
+    if (config.hotSpotDebug) {
+        console.log("Debug");
+        var coords = mouseEventToCoords(event);
+            console.log('Pitch: ' + coords[0] + ', Yaw: ' + coords[1] + ', Center Pitch: ' +
+                config.pitch + ', Center Yaw: ' + config.yaw + ', HFOV: ' + config.hfov);
+    }
+
     requestAnimationFrame(animate);
 }
 
+var lastMouseCoords;
 function onDocumentMouseMove(event) {
+    lastMouseCoords = mouseEventToCoords(event);
     if (isUserInteracting) {
         //TODO: This still isn't quite right
         config.yaw = ((Math.atan(onPointerDownPointerX / canvas.width * 2 - 1) - Math.atan(event.clientX / canvas.width * 2 - 1)) * 180 / Math.PI * config.hfov / 90) + onPointerDownYaw;
         vfov = 2 * Math.atan(Math.tan(config.hfov/360*Math.PI) * canvas.height / canvas.width) * 180 / Math.PI;
         config.pitch = ((Math.atan(event.clientY / canvas.height * 2 - 1) - Math.atan(onPointerDownPointerY / canvas.height * 2 - 1)) * 180 / Math.PI * vfov / 90) + onPointerDownPitch;
     }
+}
+
+/**
+ * Calculate panorama pitch and yaw from location of mouse event.
+ * @private
+ * @param {MouseEvent} event - Document mouse down event.
+ * @returns {number[]} [pitch, yaw]
+ */
+function mouseEventToCoords(event) {
+    var pos = mousePosition(event);
+    //var canvas = renderer.getCanvas();
+    var canvasWidth = canvas.clientWidth,
+        canvasHeight = canvas.clientHeight;
+    var x = pos.x / canvasWidth * 2 - 1;
+    var y = (1 - pos.y / canvasHeight * 2) * canvasHeight / canvasWidth;
+    var focal = 1 / Math.tan(config.hfov * Math.PI / 360);
+    var s = Math.sin(config.pitch * Math.PI / 180);
+    var c = Math.cos(config.pitch * Math.PI / 180);
+    var a = focal * c - y * s;
+    var root = Math.sqrt(x*x + a*a);
+    var pitch = Math.atan((y * c + focal * s) / root) * 180 / Math.PI;
+    var yaw = Math.atan2(x / root, a / root) * 180 / Math.PI + config.yaw;
+    if (yaw < -180)
+        yaw += 360;
+    if (yaw > 180)
+        yaw -= 360;
+    return [pitch, yaw];
+}
+
+
+/**
+ * Calculate mouse position relative to top left of viewer container.
+ * @private
+ * @param {MouseEvent} event - Mouse event to use in calculation
+ * @returns {Object} Calculated X and Y coordinates
+ */
+function mousePosition(event) {
+    var bounds = panEl.getBoundingClientRect();
+    var pos = {};
+    pos.x = event.clientX - bounds.left;
+    pos.y = event.clientY - bounds.top;
+    return pos;
 }
 
 function onDocumentMouseUp(event) {
@@ -383,6 +434,7 @@ function onDocumentMouseWheel(event) {
 }
 
 function onDocumentKeyPress(event) {
+    console.log("key down");
     // Override default action
     event.preventDefault();
 
@@ -405,6 +457,13 @@ function onDocumentKeyPress(event) {
         // Change key
         changeKey(keynumber, true);
     }
+
+    event.pitch = lastMouseCoords[0];
+    event.yaw = lastMouseCoords[1];
+    event.centerPitch = config.pitch;
+    event.centerYaw = config.yaw;
+    console.log("calling custom keypressed");
+    customKeyPressed(event);
 }
 
 function clearKeys() {
@@ -1006,6 +1065,11 @@ this.createHotSpots = function(){
 
 this.getConfig = function(){
     return config;
+}
+
+var customKeyPressed;
+this.setCustomKeyPressed = function(fct){
+    customKeyPressed = fct;
 }
 
 };
