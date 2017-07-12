@@ -73,17 +73,17 @@ var ViewersManagers = function(){
         }
 
         panFrom.destroyHotSpots();
-        globalSceneConfig[currentSceneIdFrom]["hotSpots"].push(
-            {
-                "pitch": pitch,
-                "yaw": yaw,
-                "targetPitch": panTo.getPitch(),
-                "targetYaw": panTo.getYaw(),
-                "type": "scene",
-                "text": currentSceneIdTo,
-                "sceneId": currentSceneIdTo
-            }
-        );
+        var pannellumHotSpot = {
+            "pitch": pitch,
+            "yaw": yaw,
+            "targetPitch": panTo.getPitch(),
+            "targetYaw": panTo.getYaw(),
+            "type": "scene",
+            "text": currentSceneIdTo,
+            "sceneId": currentSceneIdTo
+        };
+        globalSceneConfig[currentSceneIdFrom]["hotSpots"].push(pannellumHotSpot);
+        savePannellumHotSpot(currentSceneIdFrom, pannellumHotSpot, function(a){ console.log(pannellumHotSpot); });
         loadPanorama(currentSceneIdFrom, panFrom.getPitch(), panFrom.getYaw(), panFrom.getHfov(), "from");
     };
 
