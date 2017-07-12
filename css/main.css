@@ -3,12 +3,12 @@
 }
 
 .viewers{
-    height: 60%;
+    height: 300px;
 }
 
 .viewers .pannellum-container{
-    display: inline-block;
-    width: 48%;
-    height: 100%;
+    position: absolute;
+    width: 540px;
+    height: 300px;
     margin-left: 10px;
 }

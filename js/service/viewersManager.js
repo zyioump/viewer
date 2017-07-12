@@ -30,6 +30,13 @@ var ViewersManagers = function(){
         panFrom.setConfig( panoCfg );
         panTo.setConfig( panoCfg );
 
+        panFrom.setHotspotCallBack = function(sceneId){
+            loadPanorama(sceneId, "from"); // TODO test
+        };
+        panTo.setHotspotCallBack = function(){
+            loadPanorama(sceneId, "to"); // TODO test
+        };
+
         panFrom.init(function(){
             panTo.init(cb);
         });
