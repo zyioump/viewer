@@ -35,14 +35,18 @@ var LotService = function(){
     });
   }
 
-  var getTileLot = function(id_campaign, cb){
+  var getTileLot = function(id_campaign, active, cb){
     var tileLot = [];
     var allLot = getAllLot(id_campaign, function(allLot){
       for (var i = 0; i<allLot.length; i++){
         if (allLot[i].tile.id_tile != null){
-          //if (allLot[i].active != null ){
+          if (active == true){
+            if (allLot[i].active != null ){
+              tileLot.push(allLot[i])
+            }
+          }else{
             tileLot.push(allLot[i])
-          //}
+          }
         }
       }
       cb(tileLot);

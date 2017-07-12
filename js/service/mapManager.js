@@ -41,14 +41,14 @@ var MapManager = function(){
     markerColor: 'white'
   });
 
-  var displayMap = function(lot_service){
+  var displayMap = function(lot_service, center_sensors){
     allLot = lot_service.getAllLot(window.campaign, function(allLot){
 
     for (var i = 0; i<allLot.length; i++){
       sensors = lot_service.getSensors(allLot[i].sensors.id_sensors, window.cul, function(sensors){
         lot = lot_service.getLot(window.campaign, sensors.lot[0].id_lot, function(lot){
 
-          if (sensors.id_sensors == 1){
+          if (sensors.id_sensors == center_sensors){
             map.panTo(new L.LatLng(sensors.gps_pos.coordinates[0], sensors.gps_pos.coordinates[1]), {animate: true, duration: 0.6});
           }
 

@@ -1,23 +1,24 @@
-var viewers, lotService, mapManager, pannellumConfig, sceneConfig;
+var viewers, lotService, mapManager, pannellumConfig, sceneConfig, confP;
 
 function go(){
   window.db = document.getElementById("db").value;
   window.fm = document.getElementById("fm").value;
   window.campaign = document.getElementById("campaign").value;
   window.cul = document.getElementById("cul").value;
+  confP = document.getElementById("confP");
 
   lotService = LotService();
 
   mapManager = MapManager();
   mapManager.initMap();
-  mapManager.displayMap(lotService);
+  mapManager.displayMap(lotService, 1);
 
   pannellumConfig = PannellumConfig();
-  pannellumConfig.makeConfigScene(lotService);
+
   sceneConfig = pannellumConfig.getSceneConfig();
     // -- loading pannellums
     viewers = ViewersManagers();
-    //viewers.initViewers(sceneConfig, function(){ });
+
 }
 // dirty event manager
 var loadPanorama = function(sceneId, pitch, yaw, hfov, viewerId){
@@ -57,6 +58,18 @@ function desactivate(id_lot, id_campaign, id_malette){
       dataType: 'json'
     });
 
-    mapManager.displayMap(lotService);
+    mapManager.displayMap(lotService, lot.sensors.id_sensors);
   });
+}
+
+function initViewers(){
+  viewers.initViewers(sceneConfig, function(){ });
+}
+
+function makeConf(active){
+  pannellumConfig.makeConfigScene(lotService, active);
+}
+
+function printConf(){
+  confP.innerHTML = JSON.stringify(window.globalSceneConfig);
 }
