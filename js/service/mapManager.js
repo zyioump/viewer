@@ -3,21 +3,27 @@ var MapManager = function(){
   var lastBlackMarker;
   var lastWhiteMarker;
 
+  var map;
   var initMap = function(){
-    map = new L.Map('map');
-
+    map = new L.Map('map')
     // create the tile layer with correct attribution
     var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: osmAttrib});
 
-    map.setView(new L.LatLng(48.27219,-3.55856),9);
+    map.setView(new L.LatLng(48.27219,-3.55856),16);
     map.addLayer(osm);
+    window.map = map
   }
 
   var redMarker = L.AwesomeMarkers.icon({
     icon: 'coffee',
     markerColor: 'red'
+  });
+
+  var purpleMarker = L.AwesomeMarkers.icon({
+    icon: 'coffee',
+    markerColor: 'purple'
   });
 
   var blueMarker = L.AwesomeMarkers.icon({
@@ -41,12 +47,22 @@ var MapManager = function(){
     for (var i = 0; i<allLot.length; i++){
       sensors = lot_service.getSensors(allLot[i].sensors.id_sensors, window.cul, function(sensors){
         lot = lot_service.getLot(window.campaign, sensors.lot[0].id_lot, function(lot){
+
+          if (sensors.id_sensors == 1){
+            map.panTo(new L.LatLng(sensors.gps_pos.coordinates[0], sensors.gps_pos.coordinates[1]), {animate: true, duration: 0.6});
+          }
+
           if (lot.tile.id_tile == null){
             markers[lot.id_lot+"-"+lot.id_malette] = L.marker([sensors.gps_pos.coordinates[0], sensors.gps_pos.coordinates[1]], {icon: redMarker}).addTo(map);
             markers[lot.id_lot+"-"+lot.id_malette].bindPopup(JSON.stringify(lot));
           }else{
-            markers[lot.id_lot+"-"+lot.id_malette] = L.marker([sensors.gps_pos.coordinates[0], sensors.gps_pos.coordinates[1]], {icon: blueMarker}).addTo(map);
-            markers[lot.id_lot+"-"+lot.id_malette].bindPopup(lot.id_lot+"-"+lot.id_malette+"</br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", \"from\")'>Display to left</button></br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", \"to\")'>Display to right</button>");
+            if (lot.active != null){
+              markers[lot.id_lot+"-"+lot.id_malette] = L.marker([sensors.gps_pos.coordinates[0], sensors.gps_pos.coordinates[1]], {icon: blueMarker}).addTo(map);
+              markers[lot.id_lot+"-"+lot.id_malette].bindPopup(lot.id_lot+"-"+lot.id_malette+"</br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", \"from\")'>Display to left</button></br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", \"to\")'>Display to right</button></br><button onclick='desactivate("+lot.id_lot+", "+lot.campaign.id_campaign+", "+lot.id_malette+")'>Desactivate</button>");
+            }else{
+              markers[lot.id_lot+"-"+lot.id_malette] = L.marker([sensors.gps_pos.coordinates[0], sensors.gps_pos.coordinates[1]], {icon: purpleMarker}).addTo(map);
+              markers[lot.id_lot+"-"+lot.id_malette].bindPopup(lot.id_lot+"-"+lot.id_malette+"</br><button onclick='activate("+lot.id_lot+", "+lot.campaign.id_campaign+", "+lot.id_malette+")'>Activate</button>");
+            }
           }
         });
       })
