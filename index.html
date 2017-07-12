@@ -26,7 +26,7 @@
   <input placeholder="Placeholder" id="db" value="http://opv_master:5000" type="text" class="validate">
 
   <label>File Manager : </label>
-  <input placeholder="Placeholder" id="fm" value="http://opv_master:5005" type="text" class="validate">
+  <input placeholder="Placeholder" id="fm" value="http://opv_master:5050" type="text" class="validate">
 
   <label>Campaign : </label>
   <input placeholder="Placeholder" id="campaign" value="1" type="text" class="validate">
@@ -35,6 +35,11 @@
   <input placeholder="Placeholder" id="cul" value="1" type="text" class="validate">
   <script src="js/main.js"></script>
 
-  <button onclick="go()">Let's go !</button>
+  <button onclick="go()">Let's go !</button></br>
+  <button onclick="initViewers()">Init Pannellum</button></br>
+  <button onclick="makeConf(false)">Maker conf with desactivate</button>
+  <button onclick="makeConf(true)">Maker conf without desactivate</button>
+  <button onclick="printConf()">Print conf</button>
+  <p id="confP" ></p>
 </body>
 </html>
