@@ -1,3 +1,14 @@
 #map {
-  height: 100%;
+  height: 40%;
+}
+
+.viewers{
+    height: 60%;
+}
+
+.viewers .pannellum-container{
+    display: inline-block;
+    width: 48%;
+    height: 100%;
+    margin-left: 10px;
 }
