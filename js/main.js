@@ -1,29 +1,62 @@
-window.db = "http://opv_master:5000";
-window.fm = "http://opv_master:5050";
-window.campaign = 1;
-window.cul = 15;
+var viewers, lotService, mapManager, pannellumConfig, sceneConfig;
 
-var lotService = LotService();
+function go(){
+  window.db = document.getElementById("db").value;
+  window.fm = document.getElementById("fm").value;
+  window.campaign = document.getElementById("campaign").value;
+  window.cul = document.getElementById("cul").value;
 
-var mapManager = MapManager();
-mapManager.initMap();
-mapManager.displayMap(lotService);
+  lotService = LotService();
 
-var pannellumConfig = PannellumConfig();
-pannellumConfig.makeConfigScene(lotService);
-var sceneConfig = pannellumConfig.getSceneConfig();
+  mapManager = MapManager();
+  mapManager.initMap();
+  mapManager.displayMap(lotService);
 
-// -- loading pannellums
-var viewers = ViewersManagers();
-var pt, pf;
-//viewers.initViewers(sceneConfig, function(){ });
-pt = viewers.getPanTo();
-pf = viewers.getPanFrom();
-
+  pannellumConfig = PannellumConfig();
+  pannellumConfig.makeConfigScene(lotService);
+  sceneConfig = pannellumConfig.getSceneConfig();
+    // -- loading pannellums
+    viewers = ViewersManagers();
+    //viewers.initViewers(sceneConfig, function(){ });
+}
 // dirty event manager
 var loadPanorama = function(sceneId, pitch, yaw, hfov, viewerId){
     viewers.loadPanorama(sceneId, pitch, yaw, hfov, viewerId);
 
     // -- Map part
     mapManager.focusPanorama(sceneId, viewerId);
+}
+
+function activate(id_lot, id_campaign, id_malette){
+  lot = lotService.getLot(id_campaign, id_lot, function(lot){
+    lot.active = true;
+
+    $.ajax({
+      url : window.db+"/lot/"+id_lot+"/"+id_malette+"/",
+      data : JSON.stringify(lot),
+      type : 'PATCH',
+      contentType : 'application/json',
+      processData: false,
+      dataType: 'json'
+    });
+
+    mapManager.displayMap(lotService);
+  });
+}
+
+function desactivate(id_lot, id_campaign, id_malette){
+  lot = lotService.getLot(id_campaign, id_lot, function(lot){
+    lot.active = null;
+
+    $.ajax({
+      url : window.db+"/lot/"+id_lot+"/"+id_malette+"/",
+      data : JSON.stringify(lot),
+      type : 'PATCH',
+      contentType : 'application/json',
+      processData: false,
+      dataType: 'json'
+    });
+
+    mapManager.displayMap(lotService);
+  });
 }

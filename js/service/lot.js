@@ -40,7 +40,9 @@ var LotService = function(){
     var allLot = getAllLot(id_campaign, function(allLot){
       for (var i = 0; i<allLot.length; i++){
         if (allLot[i].tile.id_tile != null){
-          tileLot.push(allLot[i])
+          //if (allLot[i].active != null ){
+            tileLot.push(allLot[i])
+          //}
         }
       }
       cb(tileLot);
