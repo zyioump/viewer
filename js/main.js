@@ -72,4 +72,5 @@ function makeConf(active){
 
 function printConf(){
   confP.innerHTML = JSON.stringify(window.globalSceneConfig);
+  window.sceneConfig = window.globalSceneConfig;
 }

@@ -61,7 +61,7 @@ var MapManager = function(){
               markers[lot.id_lot+"-"+lot.id_malette].bindPopup(lot.id_lot+"-"+lot.id_malette+"</br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", 0, 0, \"same\", \"from\")'>Display to left</button></br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", 0, 0, \"same\", \"to\")'>Display to right</button></br><button onclick='desactivate("+lot.id_lot+", "+lot.campaign.id_campaign+", "+lot.id_malette+")'>Desactivate</button>");
             }else{
               markers[lot.id_lot+"-"+lot.id_malette] = L.marker([sensors.gps_pos.coordinates[0], sensors.gps_pos.coordinates[1]], {icon: purpleMarker}).addTo(map);
-              markers[lot.id_lot+"-"+lot.id_malette].bindPopup(lot.id_lot+"-"+lot.id_malette+"</br><button onclick='activate("+lot.id_lot+", "+lot.campaign.id_campaign+", "+lot.id_malette+")'>Activate</button>");
+              markers[lot.id_lot+"-"+lot.id_malette].bindPopup(lot.id_lot+"-"+lot.id_malette+"</br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", 0, 0, \"same\", \"from\")'>Display to left</button></br><button onclick='loadPanorama(\""+lot.id_lot+"-"+lot.id_malette+"\", 0, 0, \"same\", \"to\")'>Display to right</button></br><button onclick='activate("+lot.id_lot+", "+lot.campaign.id_campaign+", "+lot.id_malette+")'>Activate</button>");
             }
           }
         });
