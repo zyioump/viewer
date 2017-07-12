@@ -10,12 +10,15 @@ var ViewersManagers = function(){
         	"author": "Open Path View",
         	"autoload": true,
         	"autoRotate": -4,
+            "hotSpotDebug": true,
 
         	"firstScene": "Lily_Allen"
         },
 
         "scenes":{}
     };
+    var currentSceneIdFrom;
+    var currentSceneIdTo;
 
 
 
@@ -30,21 +33,58 @@ var ViewersManagers = function(){
         panFrom.setConfig( panoCfg );
         panTo.setConfig( panoCfg );
 
-        panFrom.setHotspotCallBack = function(sceneId){
+        panFrom.setHotspotCallBack(function(sceneId){
             loadPanorama(sceneId, "from"); // TODO test
-        };
-        panTo.setHotspotCallBack = function(){
+        });
+        panTo.setHotspotCallBack( function(){
             loadPanorama(sceneId, "to"); // TODO test
-        };
+        });
 
         panFrom.init(function(){
-            panTo.init(cb);
+            panTo.init(function(){
+                panFrom.setCustomKeyPressed(function(event){
+                    console.log("CustomKeyPressed");
+                    if(event.keycode == 80){
+                        console.log("Calling create hotspot");
+                        createHotspot(event.pitch, event.yaw);
+                    }
+                });
+                cb();
+            });
         });
+    };
+
+    var loadPanorama = function(sceneId, viewerId){
+        if(viewerId==="from"){
+            pf.loadScene(sceneId);
+            currentSceneIdFrom = sceneId;
+        }
+        if(viewerId==="to"){
+            pt.loadScene(sceneId);
+            currentSceneIdTo = sceneId;
+        }
+    };
+
+    var createHotspot = function(pitch, yaw){
+        globalSceneConfig[currentSceneIdFrom]["hotSpots"].push(
+            {
+                "pitch": pitch,
+                "yaw": yaw,
+                "targetPitch": panTo.getPitch(),
+                "targetYaw": panTo.getYaw(),
+                "type": "scene",
+                "text": currentSceneIdTo,
+                "sceneId": currentSceneIdTo
+            }
+        );
+        panFrom.destroyHotSpots();
+        panFrom.createHotspot();
     };
 
     return{
         initViewers: initViewers,
         getPanTo: function(){ return panTo; },
-        getPanFrom: function(){ return panFrom; }
+        getPanFrom: function(){ return panFrom; },
+        loadPanorama: loadPanorama
     };
 };
