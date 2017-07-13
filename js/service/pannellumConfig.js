@@ -4,6 +4,8 @@ var PannellumConfig = function(){
   var makeConfigScene = function(lot_service, active){
     window.globalSceneConfig = "";
     config =  new Object();
+    var totalPoc = [];
+
     tileLot = lot_service.getTileLot(window.campaign, active, function(tileLot){
       for (var i = 0; i<tileLot.length ; i++){
         config[tileLot[i].id_lot+"-"+tileLot[i].campaign.id_malette] = {};
@@ -15,9 +17,11 @@ var PannellumConfig = function(){
             if (tileLot[j].tile.id_tile == tile.id_tile){
               var id = tileLot[j].id_lot+"-"+tileLot[j].id_malette;
               config[id]['preview'] = window.fm+"/v1/files/"+tile.fallback_path+"/fallback/f.jpg";
+              totalPoc.push(tile.fallback_path);
               config[id]['type'] = "multires";
               config[id]['multiRes'] = {};
               config[id]['multiRes']["path"] = window.fm+"/v1/files/"+tile.param_location+"/%l/%s%y_%x";
+              totalPoc.push(tile.param_location);
               config[id]['multiRes']["extension"] = tile.extension;
               config[id]['multiRes']["tileResolution"] = tile.resolution;
               config[id]['multiRes']["maxLevel"] = tile.max_level;
@@ -51,6 +55,10 @@ var PannellumConfig = function(){
         });
 
       }
+
+      config["pocTODL"] = totalPoc;
+
+      window.tmp = totalPoc;
       window.globalSceneConfig = config;
     });
   }
