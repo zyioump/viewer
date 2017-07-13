@@ -61,6 +61,14 @@ var LotService = function(){
     });
   }
 
+  var getTrackEdges = function(id_lot, id_malette, cb){
+      var track_edges = $.getJSON(window.db+"/trackedge/"+id_lot+"/"+id_malette+"/", function(trackedge){
+
+        cb(track_edges);
+        return track_edges;
+      });
+  };
+
   return {
     getAllLot: getAllLot,
     getSensors: getSensors,

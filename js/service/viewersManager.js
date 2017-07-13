@@ -33,6 +33,7 @@ var ViewersManagers = function(){
         panTo = pannellum.viewer('panTo', panoCfg);
 
         panFrom.setHotspotCallBack(function(sceneId, pitch, yaw, hfov){
+            console.log("viewerManager callback called");
             loadPanorama(sceneId, pitch, yaw, hfov, "to"); // TODO test
         });
         /*panTo.setHotspotCallBack(function(sceneId, pitch, yaw, hfov){
@@ -45,6 +46,10 @@ var ViewersManagers = function(){
                 var coords = panFrom.getLastMouseCoords();
                 createHotspot(coords[0], coords[1]);
             }
+        });
+
+        panFrom.setHotspotDbClicCallback(function(hs){
+            deleteHotspot(hs);
         });
 
         /*panFrom.init(function(){
@@ -83,8 +88,30 @@ var ViewersManagers = function(){
             "sceneId": currentSceneIdTo
         };
         globalSceneConfig[currentSceneIdFrom]["hotSpots"].push(pannellumHotSpot);
-        savePannellumHotSpot(currentSceneIdFrom, pannellumHotSpot, function(a){ console.log(pannellumHotSpot); });
+        trackedgeService.savePannellumHotSpot(currentSceneIdFrom, pannellumHotSpot, function(a){
+            console.log("savePannellumHotSpot callback");
+            console.log(a);
+            pannellumHotSpot['id_track_edge']=a["id_track_edge"];
+            pannellumHotSpot['id_malette']=a["id_malette"];
+        });
         loadPanorama(currentSceneIdFrom, panFrom.getPitch(), panFrom.getYaw(), panFrom.getHfov(), "from");
+    };
+
+    var deleteHotspot = function(hs){
+        console.log("Delete hotspot : ");
+        console.log(hs);
+        var hotSpots = globalSceneConfig[currentSceneIdFrom]["hotSpots"];
+        for(var i=0; i < hotSpots.length; i++){
+            console.log(hotSpots[i]);
+            if("id_track_edge" in hotSpots[i] && hotSpots[i]["id_track_edge"]==hs["id_track_edge"]){
+                console.log("found it, id_track_edge : "+hs["id_track_edge"]);
+                panFrom.destroyHotSpots();
+                trackedgeService.deleteHotspot(hotSpots[i]["id_track_edge"], hotSpots[i]["id_malette"])
+                hotSpots.splice(i);
+                loadPanorama(currentSceneIdFrom, panFrom.getPitch(), panFrom.getYaw(), panFrom.getHfov(), "from");
+                break;
+            }
+        }
     };
 
     return{

@@ -69,6 +69,7 @@ var config,
     update = false, // Should we update when still to render dynamic content
     hotspotsCreated = false,
     hotspotCallback = null,
+    hotspotDbClicCallback = null,
     customKeyDownEvent = null,
     lastMouseCoords = null;
 
@@ -1674,13 +1675,22 @@ function createHotSpot(hs) {
             div.onclick = div.ontouchend = function() {
                 if (!div.clicked) {
                     div.clicked = true;
+                    console.log("hotspot clicked");
                     if(hotspotCallback==null){
                         loadScene(hs.sceneId, hs.targetPitch, hs.targetYaw, hs.targetHfov);
                     }else{
+                        console.log("callback called");
                         hotspotCallback(hs.sceneId, hs.targetPitch, hs.targetYaw, hs.targetHfov);
+                        div.clicked = false;
                     }
                 }
                 return false;
+            };
+            div.ondblclick = function(){
+                console.log("hotspot - ondblclick");
+                if(hotspotDbClicCallback!=null){
+                    hotspotDbClicCallback(hs);
+                }
             };
             div.style.cursor = 'pointer';
             span.style.cursor = 'pointer';
@@ -2820,6 +2830,10 @@ function fireEvent(type) {
 this.setHotspotCallBack = function(cb){
     hotspotCallback = cb;
 };
+
+this.setHotspotDbClicCallback = function(cb){
+    hotspotDbClicCallback = cb;
+}
 
 /**
  * Destructor.

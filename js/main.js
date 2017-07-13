@@ -1,4 +1,4 @@
-var viewers, lotService, mapManager, pannellumConfig, sceneConfig, confP;
+var viewers, lotService, mapManager, pannellumConfig, sceneConfig, confP, trackedgeService;
 
 function go(){
   window.db = document.getElementById("db").value;
@@ -8,6 +8,7 @@ function go(){
   confP = document.getElementById("confP");
 
   lotService = LotService();
+  trackedgeService = TrackEdge();
 
   mapManager = MapManager();
   mapManager.initMap();
@@ -18,7 +19,6 @@ function go(){
   sceneConfig = pannellumConfig.getSceneConfig();
     // -- loading pannellums
     viewers = ViewersManagers();
-
 }
 // dirty event manager
 var loadPanorama = function(sceneId, pitch, yaw, hfov, viewerId){
