@@ -1,8 +1,9 @@
 var PannellumConfig = function(){
-  var config = new Object();
+  var config;
 
   var makeConfigScene = function(lot_service, active){
     window.globalSceneConfig = "";
+    config =  new Object();
     tileLot = lot_service.getTileLot(window.campaign, active, function(tileLot){
       for (var i = 0; i<tileLot.length ; i++){
         config[tileLot[i].id_lot+"-"+tileLot[i].campaign.id_malette] = {};
