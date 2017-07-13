@@ -63,7 +63,7 @@ function desactivate(id_lot, id_campaign, id_malette){
 }
 
 function initViewers(){
-  viewers.initViewers(sceneConfig, function(){ });
+  viewers.initViewers(globalSceneConfig, function(){ });
 }
 
 function makeConf(active){

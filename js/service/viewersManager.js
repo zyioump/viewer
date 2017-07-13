@@ -24,6 +24,7 @@ var ViewersManagers = function(){
     var initViewers = function(sceneConfig, cb){
 
         panoCfg["scenes"] = sceneConfig;
+        console.log(sceneConfig);
         panoCfg["default"]["firstScene"] = Object.keys(sceneConfig)[0];
         currentSceneIdTo = currentSceneIdFrom = Object.keys(sceneConfig)[0];
 
