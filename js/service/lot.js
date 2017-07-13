@@ -62,9 +62,8 @@ var LotService = function(){
   }
 
   var getTrackEdges = function(id_lot, id_malette, cb){
-      var track_edges = $.getJSON(window.db+"/trackedge/"+id_lot+"/"+id_malette+"/", function(trackedge){
-
-        cb(track_edges);
+      var track_edges = $.getJSON(window.db+"/trackedge/?id_lot_from="+id_lot+"&id_lot_malette_from="+id_malette, function(trackedge){
+        cb(track_edges.responseJSON.objects);
         return track_edges;
       });
   };
@@ -74,6 +73,7 @@ var LotService = function(){
     getSensors: getSensors,
     getLot: getLot,
     getTileLot: getTileLot,
-    getTile: getTile
+    getTile: getTile,
+    getTrackEdges: getTrackEdges
   }
 }

@@ -24,7 +24,6 @@ var ViewersManagers = function(){
     var initViewers = function(sceneConfig, cb){
 
         panoCfg["scenes"] = sceneConfig;
-        console.log(sceneConfig);
         panoCfg["default"]["firstScene"] = Object.keys(sceneConfig)[0];
         currentSceneIdTo = currentSceneIdFrom = Object.keys(sceneConfig)[0];
 
@@ -60,11 +59,21 @@ var ViewersManagers = function(){
         });*/
     };
 
+    var uxDisable = function(viewerId){
+        document.getElementById(viewerId+"Disable").display="inline";
+        document.getElementById(viewerId+"Active").display="none";
+    };
+    var uxActive = function(viewerId){
+        document.getElementById(viewerId+"Disable").display="none";
+        document.getElementById(viewerId+"Active").display="inline";
+    };
+
     var loadPanorama = function(sceneId, pitch, yaw, hfov, viewerId){
         console.log("loadPanorama");
         if(viewerId==="from"){
             panFrom.loadScene(sceneId, pitch, yaw, hfov);
             currentSceneIdFrom = sceneId;
+            
         }
         if(viewerId==="to"){
             panTo.loadScene(sceneId, pitch, yaw, hfov);
@@ -115,10 +124,89 @@ var ViewersManagers = function(){
         }
     };
 
+    var panFromActivateCurrent = function(){
+        var ids = currentSceneIdFrom.split("-");
+        activate(ids[0], window.campaign, ids[1]);
+    };
+
+    var panToActivateCurrent = function(){
+        var ids = currentSceneIdTo.split("-");
+        activate(ids[0], window.campaign, ids[1]);
+    };
+
+    var prev = function(viewerId){
+        var currentIds, currentSceneId;
+        if(viewerId == 'to'){
+            currentSceneId = currentSceneIdTo;
+        }
+        if(viewerId == 'from'){
+            currentSceneId = currentSceneIdFrom;
+        }
+        currentIds = currentSceneId.split("-");
+
+        var lastSceneId = null;
+        for(var k in panoCfg["scenes"]){
+            if(k==currentSceneId){
+                loadPanorama(lastSceneId, 0, 0, 'same', viewerId);
+                return lastSceneId;
+            }
+            lastSceneId = k;
+        }
+    };
+
+    var next = function(viewerId){
+        console.log('next');
+        var currentIds, currentSceneId;
+        if(viewerId == 'to'){
+            currentSceneId = currentSceneIdTo;
+        }
+        if(viewerId == 'from'){
+            currentSceneId = currentSceneIdFrom;
+        }
+        currentIds = currentSceneId.split("-");
+
+        var found = false;
+        for(var k in panoCfg["scenes"]){
+            lastSceneId = k;
+            if(found){
+                loadPanorama(k, 0, 0, 'same', viewerId);
+                return k;
+            }
+            found = found || k == currentSceneId;
+        }
+    };
+
+    var loadScene = function(viewerId){
+        sceneIdToLoad = (viewerId=='to') ? document.getElementById('toSceneId').value : document.getElementById('fromSceneId').value;
+        loadPanorama(sceneIdToLoad, 0, 0, 'same', viewerId);
+    };
+
+    var getCurrentSceneId = function(viewerId){
+        return (viewerId=='to') ? currentSceneIdTo : currentSceneIdFrom;
+    };
+
+    var active = function(viewerId){
+        var ids = getCurrentSceneId(viewerId).split('-');
+        activate(parseInt(ids[0]), window.campaign, parseInt(ids[1]));
+        uxDisable(viewerId);
+    };
+
+    var disable = function(viewerId){
+        var ids = getCurrentSceneId(viewerId).split('-');
+        desactivate(parseInt(ids[0]), window.campaign, parseInt(ids[1]));
+        uxActive(viewerId);
+    };
+
     return{
         initViewers: initViewers,
         getPanTo: function(){ return panTo; },
         getPanFrom: function(){ return panFrom; },
-        loadPanorama: loadPanorama
+        loadPanorama: loadPanorama,
+        panFromActivateCurrent: panFromActivateCurrent,
+        prev: prev,
+        next: next,
+        loadScene: loadScene,
+        active: active,
+        disable: disable
     };
 };

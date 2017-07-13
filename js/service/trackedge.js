@@ -51,8 +51,23 @@ var TrackEdge = function(){
         });
     }
 
+    var trackEdgeToHotspot = function(trackedge){
+        return {
+                "pitch": trackedge['pitch'],
+                "yaw": trackedge['yaw'],
+                "targetPitch": trackedge['targetPitch'],
+                "targetYaw": trackedge['targetYaw'],
+                "type": "scene",
+                "text": trackedge["lot_to"]["id_lot"]+"-"+trackedge["lot_to"]["id_malette"],
+                "sceneId": trackedge["lot_to"]["id_lot"]+"-"+trackedge["lot_to"]["id_malette"],
+                "id_track_edge": trackedge["id_track_edge"],
+                "id_malette": trackedge["id_malette"]
+            };
+    };
+
     return {
         savePannellumHotSpot: savePannellumHotSpot,
-        deleteHotspot: deleteHotspot
+        deleteHotspot: deleteHotspot,
+        trackEdgeToHotspot: trackEdgeToHotspot,
     };
 };

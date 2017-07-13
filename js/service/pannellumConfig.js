@@ -14,7 +14,6 @@ var PannellumConfig = function(){
           for (var j = 0; j<tileLot.length; j++){
             if (tileLot[j].tile.id_tile == tile.id_tile){
               var id = tileLot[j].id_lot+"-"+tileLot[j].id_malette;
-              config[id]['hotSpots'] = [];
               config[id]['preview'] = window.fm+"/v1/files/"+tile.fallback_path+"/fallback/f.jpg";
               config[id]['type'] = "multires";
               config[id]['multiRes'] = {};
@@ -23,6 +22,7 @@ var PannellumConfig = function(){
               config[id]['multiRes']["tileResolution"] = tile.resolution;
               config[id]['multiRes']["maxLevel"] = tile.max_level;
               config[id]['multiRes']["cubeResolution"] = tile.cube_resolution;
+              config[id]["hotSpots"] = [];
 
               sensors = lot_service.getSensors(tileLot[j].sensors.id_sensors, window.cul, function(sensors){
                 for (var k = 0; k<tileLot.length; k++){
@@ -34,9 +34,22 @@ var PannellumConfig = function(){
                   }
                 }
               });
+
+              lot_service.getTrackEdges(tileLot[j].id_lot, tileLot[j].id_malette, function(trackedges){
+                  console.log("getTrackEdges callback");
+                  console.log(trackedges);
+                  for(var w=0; w < trackedges.length; w++){
+                      if(trackedges[w].active){
+                          hotspot = trackedgeService.trackEdgeToHotspot(trackedges[w]);
+                          console.log(hotspot);
+                          config[id]["hotSpots"].push(hotspot);
+                      }
+                  }
+              });
             }
           }
         });
+
       }
       window.globalSceneConfig = config;
     });

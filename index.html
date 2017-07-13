@@ -18,9 +18,29 @@
   <script src="js/pannellum/src/js/pannellum.js"></script>
 </head>
 <body>
+  <div class="prevNext">
+
+  </div>
   <div class="viewers">
-      <div class="pannellum-container"><div id="panFrom" tabindex="1"></div></div>
+      <div class="pannellum-container"><div id="panFrom" tabindex="1"></div>
+      </div>
       <div class="pannellum-container"><div id="panTo" tabindex="2"></div></div>
+  </div>
+  <div class="controllers">
+      <div class="controller-container">
+          <span id="fromActive"><button onclick="viewers.active('from')">Active</button></span>
+          <span id="fromDisable"><button onclick="viewers.disable('from')">Disable</button></span>
+          <button onclick="viewers.prev('from')">Prev</button>
+          <button onclick="viewers.next('from')">Next</button>
+          ID : <input type="text" id="fromSceneId"><button onclick="viewers.loadScene('from')">LoadID</button>
+      </div>
+      <div class="controller-container">
+          <span id="toActive"><button onclick="viewers.active('to')">Active</button></span>
+          <span id="toDisable"><button onclick="viewers.disable('to')">Disable</button></span>
+          <button onclick="viewers.prev('to')">Prev</button>
+          <button onclick="viewers.next('to')">Next</button>
+          ID : <input type="text" id="toSceneId"><button onclick="viewers.loadScene('to')">LoadID</button>
+      </div>
   </div>
   <div id="map"></div>
   <label>Data Base : </label>

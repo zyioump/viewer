@@ -10,3 +10,12 @@
     width: 850px;
     height: 420px;
 }
+
+.controllers{
+    display: flex;
+}
+
+.controller-container{
+    width: 850px;
+    height: 25px;
+}
