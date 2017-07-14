@@ -18,14 +18,25 @@ var ViewersManagers = function(){
     };
     var currentSceneIdFrom;
     var currentSceneIdTo;
+    var currentScenesIndex = {'from': 0, 'to': 0 };
+    var scenesKeys = []; // Contains scenes keys
 
 
 
     var initViewers = function(sceneConfig, cb){
 
         panoCfg["scenes"] = sceneConfig;
-        panoCfg["default"]["firstScene"] = Object.keys(sceneConfig)[0];
-        currentSceneIdTo = currentSceneIdFrom = Object.keys(sceneConfig)[0];
+
+        // indexes
+        for (k in panoCfg["scenes"]) {
+          if (panoCfg["scenes"].hasOwnProperty(k)) {
+            scenesKeys.push(k);
+          }
+        }
+        scenesKeys.sort();
+
+        panoCfg["default"]["firstScene"] = scenesKeys[0];
+        currentSceneIdTo = currentSceneIdFrom = scenesKeys[0];
 
         console.log(panoCfg);
 
@@ -51,12 +62,6 @@ var ViewersManagers = function(){
         panFrom.setHotspotDbClicCallback(function(hs){
             deleteHotspot(hs);
         });
-
-        /*panFrom.init(function(){
-            panTo.init(function(){
-                cb();
-            });
-        });*/
     };
 
     var uxDisable = function(viewerId){
@@ -154,7 +159,8 @@ var ViewersManagers = function(){
         currentIds = currentSceneId.split("-");
 
         var lastSceneId = null;
-        for(var k in panoCfg["scenes"]){
+        for(var i in scenesKeys){
+            k = scenesKeys[i];
             if(k==currentSceneId){
                 loadPanorama(lastSceneId, 0, 0, 'same', viewerId);
                 return lastSceneId;
@@ -174,8 +180,9 @@ var ViewersManagers = function(){
         }
         currentIds = currentSceneId.split("-");
 
-        var found = false;
-        for(var k in panoCfg["scenes"]){
+        var found = false, k;
+        for(var i in scenesKeys){
+            k = scenesKeys[i];
             lastSceneId = k;
             if(found){
                 loadPanorama(k, 0, 0, 'same', viewerId);

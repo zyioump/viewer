@@ -40,8 +40,8 @@ var PannellumConfig = function(){
               });
 
               lot_service.getTrackEdges(tileLot[j].id_lot, tileLot[j].id_malette, function(trackedges){
-                  console.log("getTrackEdges callback");
-                  console.log(trackedges);
+                  //console.log("getTrackEdges callback");
+                  //console.log(trackedges);
                   for(var w=0; w < trackedges.length; w++){
                       if(trackedges[w].active){
                           hotspot = trackedgeService.trackEdgeToHotspot(trackedges[w]);
