@@ -60,25 +60,34 @@ var ViewersManagers = function(){
     };
 
     var uxDisable = function(viewerId){
-        document.getElementById(viewerId+"Disable").display="inline";
-        document.getElementById(viewerId+"Active").display="none";
+        document.getElementById(viewerId+"Disable").style.display="inline";
+        document.getElementById(viewerId+"Active").style.display="none";
     };
     var uxActive = function(viewerId){
-        document.getElementById(viewerId+"Disable").display="none";
-        document.getElementById(viewerId+"Active").display="inline";
+        document.getElementById(viewerId+"Disable").style.display="none";
+        document.getElementById(viewerId+"Active").style.display="inline";
     };
 
     var loadPanorama = function(sceneId, pitch, yaw, hfov, viewerId){
         console.log("loadPanorama");
-        if(viewerId==="from"){
+        if(viewerId=="from"){
             panFrom.loadScene(sceneId, pitch, yaw, hfov);
             currentSceneIdFrom = sceneId;
-            
         }
         if(viewerId==="to"){
             panTo.loadScene(sceneId, pitch, yaw, hfov);
             currentSceneIdTo = sceneId;
         }
+        var ids = sceneId.split('-');
+        console.log("loadPanorama getLot");
+        lotService.getLot(window.campaign, ids[0], function(lot){
+            console.log("loadPanorama getLot cb");
+            if(lot["active"]){
+                uxDisable(viewerId);
+            }else{
+                uxActive(viewerId);
+            }
+        });
     };
 
     var createHotspot = function(pitch, yaw){
