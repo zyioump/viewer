@@ -192,6 +192,16 @@ var ViewersManagers = function(){
         }
     };
 
+    var invert = function(){
+        var fromSceneId = currentSceneIdFrom;
+        var toSceneId = currentSceneIdTo;
+        panFrom.destroyHotSpots();
+        panTo.destroyHotSpots();
+
+        loadPanorama(toSceneId, 0, 0, 'same', 'from');
+        loadPanorama(fromSceneId, 0, 0, 'same', 'to');
+    };
+
     var loadScene = function(viewerId){
         sceneIdToLoad = (viewerId=='to') ? document.getElementById('toSceneId').value : document.getElementById('fromSceneId').value;
         loadPanorama(sceneIdToLoad, 0, 0, 'same', viewerId);
@@ -223,6 +233,7 @@ var ViewersManagers = function(){
         next: next,
         loadScene: loadScene,
         active: active,
-        disable: disable
+        disable: disable,
+        invert: invert
     };
 };
